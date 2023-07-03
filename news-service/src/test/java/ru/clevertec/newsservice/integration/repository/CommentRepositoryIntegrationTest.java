@@ -17,7 +17,6 @@ import static ru.clevertec.newsservice.util.Constants.*;
 import static ru.clevertec.newsservice.util.TestData.getComment;
 
 
-
 class CommentRepositoryIntegrationTest extends PostgreSQLContainerIntegrationTest {
 
     @Autowired

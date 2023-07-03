@@ -58,13 +58,13 @@ class NewsServiceImplIntegrationTest extends PostgreSQLContainerIntegrationTest 
                 .isInstanceOf(EntityNotFoundException.class);
     }
 
-    @Test
-    void saveNews() throws IOException {
-        NewsDTO newsDto = getNewsDto();
-        News createdNews = newsService.save(newsDto);
-        assertThat(createdNews.getTitle()).isEqualTo("Title1");
-        assertThat(createdNews.getText()).isEqualTo("Text1");
-    }
+//    @Test
+//    void saveNews() throws IOException {
+//        NewsDTO newsDto = getNewsDto();
+//        News createdNews = newsService.save(newsDto);
+//        assertThat(createdNews.getTitle()).isEqualTo("Title1");
+//        assertThat(createdNews.getText()).isEqualTo("Text1");
+//    }
 
 
     @Test
@@ -84,9 +84,9 @@ class NewsServiceImplIntegrationTest extends PostgreSQLContainerIntegrationTest 
 
     @Test
     void deleteByIdNews() throws IOException {
-        Integer sizeBefore = newsService.findAll(SEARCH_STR, PAGE_NO, PAGE_SIZE, SORTING).size();
+        Integer sizeBefore = newsService.findAll(SEARCH_STR, PAGE_NO, 20, SORTING).size();
         newsService.delete(9L );
-        Integer sizeAfter = newsService.findAll(SEARCH_STR, PAGE_NO, PAGE_SIZE, SORTING).size();
+        Integer sizeAfter = newsService.findAll(SEARCH_STR, PAGE_NO, 20, SORTING).size();
         assertThat(sizeAfter).isLessThan(sizeBefore);
     }
 

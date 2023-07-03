@@ -5,12 +5,53 @@
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
+          <entry name="$PROJECT_DIR$/../../../../../Gradle/gradle-7.3.3/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.28/a2ff5da8bcd8b1b26f36b806ced63213362c6dcc/lombok-1.18.28.jar" />
+          <entry name="$PROJECT_DIR$/../../../../../Gradle/gradle-7.3.3/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-configuration-processor/3.1.1/aa13cb8ae0314bb67f9c75e66042a7001b5e406c/spring-boot-configuration-processor-3.1.1.jar" />
+        </processorPath>
+        <module name="news-applications.common-exception-starter.main" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
           <entry name="$PROJECT_DIR$/../../../../../Gradle/gradle-7.3.3/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.24/13a394eed5c4f9efb2a6d956e2086f1d81e857d9/lombok-1.18.24.jar" />
         </processorPath>
-        <module name="news-service.test" />
-        <module name="news-service.main" />
+        <module name="news-applications.user-service.test" />
+        <module name="news-applications.common-logging-starter.test" />
+        <module name="news-applications.news-service.test" />
+        <module name="news-applications.news-service.main" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$PROJECT_DIR$/../../../../../Gradle/gradle-7.3.3/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.24/13a394eed5c4f9efb2a6d956e2086f1d81e857d9/lombok-1.18.24.jar" />
+          <entry name="$PROJECT_DIR$/../../../../../Gradle/gradle-7.3.3/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-autoconfigure-processor/3.0.4/f467e99127d80db3ce4dff8d3dacc58fb3bf0278/spring-boot-autoconfigure-processor-3.0.4.jar" />
+          <entry name="$PROJECT_DIR$/../../../../../Gradle/gradle-7.3.3/caches/modules-2/files-2.1/org.springframework.boot/spring-boot-configuration-processor/3.0.4/120cb2d8ed8f5f006bcc97813a920f25bd1a76da/spring-boot-configuration-processor-3.0.4.jar" />
+        </processorPath>
+        <module name="news-applications.common-logging-starter.main" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$PROJECT_DIR$/../../../../../Gradle/gradle-7.3.3/caches/modules-2/files-2.1/org.mapstruct/mapstruct-processor/1.5.3.Final/dce418bedafd71ff8dd2cef15006c0fee788b073/mapstruct-processor-1.5.3.Final.jar" />
+          <entry name="$PROJECT_DIR$/../../../../../Gradle/gradle-7.3.3/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.24/13a394eed5c4f9efb2a6d956e2086f1d81e857d9/lombok-1.18.24.jar" />
+          <entry name="$PROJECT_DIR$/../../../../../Gradle/gradle-7.3.3/caches/modules-2/files-2.1/org.projectlombok/lombok-mapstruct-binding/0.2.0/2f1cf9ced7b720ba4996c942b816669e63f0fa4f/lombok-mapstruct-binding-0.2.0.jar" />
+        </processorPath>
+        <module name="news-applications.user-service.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.6" />
+    <bytecodeTargetLevel target="17">
+      <module name="common-exception-starter" target="17" />
+      <module name="common-exception-starter.main" target="17" />
+      <module name="common-exception-starter.test" target="17" />
+      <module name="common-logging-starter" target="17" />
+      <module name="common-logging-starter.main" target="17" />
+      <module name="common-logging-starter.test" target="17" />
+      <module name="news-service" target="17" />
+      <module name="news-service.main" target="17" />
+      <module name="news-service.test" target="17" />
+      <module name="user-service" target="17" />
+      <module name="user-service.main" target="17" />
+      <module name="user-service.test" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>

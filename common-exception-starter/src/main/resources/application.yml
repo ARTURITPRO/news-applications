@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: common-logging-starter
+#To enable logging starter
+
+app:
+  common:
+    logging:
+      level: INFO
+      enabled: true

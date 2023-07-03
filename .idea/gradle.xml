@@ -10,16 +10,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-          </set>
-        </option>
-      </GradleProjectSettings>
-      <GradleProjectSettings>
-        <option name="distributionType" value="DEFAULT_WRAPPED" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/news-service" />
-        <option name="gradleHome" value="$PROJECT_DIR$/../../../../../Gradle/gradle-7.3.3" />
-        <option name="modules">
-          <set>
+            <option value="$PROJECT_DIR$/common-exception-starter" />
+            <option value="$PROJECT_DIR$/common-logging-starter" />
             <option value="$PROJECT_DIR$/news-service" />
+            <option value="$PROJECT_DIR$/user-service" />
           </set>
         </option>
       </GradleProjectSettings>

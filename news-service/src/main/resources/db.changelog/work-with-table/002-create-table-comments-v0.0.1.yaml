@@ -5,7 +5,7 @@ databaseChangeLog:
 
   - changeSet:
       id: 002v0.0.1
-      author: Artur malashkov
+      author: Artur Malashkov
       comment: Create COMMENTS table
       changes:
         - createTable:

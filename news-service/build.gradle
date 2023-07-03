@@ -23,12 +23,17 @@ repositories {
 }
 
 dependencies {
+    //Подключение стартера для логирования
+    //implementation project (':common-logging-starter')
+
+    //Подключение стартера для Exceptions
+   // implementation project (':common-logging-starter')
+
     //Основа для SpringBoot
     implementation 'org.springframework.boot:spring-boot-starter'
 
     //Стартер для web
     implementation 'org.springframework.boot:spring-boot-starter-web'
-
 
     // Подключение JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'

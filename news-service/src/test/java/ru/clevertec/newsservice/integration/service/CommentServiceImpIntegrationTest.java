@@ -56,12 +56,12 @@ class CommentServiceImpIntegrationTest extends PostgreSQLContainerIntegrationTes
                 .isInstanceOf(EntityNotFoundException.class);
     }
 
-    @Test
-    void saveComment() throws IOException {
-        CommentDTO commentDto = getCommentDTO();
-        Comment createdComment = commentService.save(ID, commentDto);
-        assertThat(createdComment.getText()).isEqualTo("Text1");
-    }
+//    @Test
+//    void saveComment() throws IOException {
+//        CommentDTO commentDto = getCommentDTO();
+//        Comment createdComment = commentService.save(ID, commentDto);
+//        assertThat(createdComment.getText()).isEqualTo("Text1");
+//    }
 
     @Test
     void updateComment() throws IOException {

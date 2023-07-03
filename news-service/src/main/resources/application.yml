@@ -20,6 +20,11 @@ spring:
     change-log: classpath:db.changelog/main-include.yaml
     clear-checksums: false
 
+#To enable logging starter
+app.common.logging:
+  enabled:true
+
+
 #To implement the LFU cache
 cache.size: 10
 cache.algorithm: LFU
