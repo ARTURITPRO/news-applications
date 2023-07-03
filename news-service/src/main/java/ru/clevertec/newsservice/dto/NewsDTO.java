@@ -12,8 +12,8 @@ import java.time.LocalDateTime;
 /**
  * <d>DTO Entity NewsDTO</d>
  *
- *  @author Artur Malashkov
- *  @since 17
+ * @author Artur Malashkov
+ * @since 17
  */
 @Data
 @Builder
@@ -21,8 +21,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class NewsDTO {
 
-
     private Long id;
+    private LocalDateTime time;
 
     @Schema(description = "News_title", example = "Economy resumes growth")
     @NotBlank(message = "no title")
@@ -38,5 +38,6 @@ public class NewsDTO {
     @NotBlank(message = "no userName")
     private String userName;
 
-    private LocalDateTime time;
+
+
 }

@@ -1,6 +1,8 @@
 
-//project(':common-logging-starter').projectDir = new File(settingsDir, 'common-logging-starter')
+
 rootProject.name = 'news-applications'
 include 'common-logging-starter'
+include 'common-exception-starter'
 include 'news-service'
+include 'user-service'
 

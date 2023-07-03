@@ -7,8 +7,9 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Repository for News.
- * NewsRepository provides methods for interacting with the database.
+ *
  * @author Artur Malashkov
+ * @since 17
  */
 @Repository
 public interface NewsRepository extends JpaRepository<News, Long>, JpaSpecificationExecutor<News> {

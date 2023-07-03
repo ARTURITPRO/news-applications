@@ -6,8 +6,10 @@ import ru.clevertec.newsservice.dto.CommentDTO;
 import java.util.List;
 
 /**
- * A service that provides CRUD operations for working with Comment.
- * @author Artur Malashkov.
+ * <p> A service that provides CRUD operations for working with Comment. </p>
+ *
+ * @author Artur Malashkov
+ * @since 17
  */
 public interface CommentService {
 
@@ -32,26 +34,32 @@ public interface CommentService {
     /**
      * Сreating new Comment in the database.
      *
+     * @param idNews     this is id News
      * @param commentDTO this is news that has been submitted for storage in the database.
-     * @param idNews  this is id News
+     * @param token      this is a unique string that is used to authenticate and authorize the user when making
+     *                   requests to protected API resources
      * @return created Comment.
      */
-    Comment save(Long idNews, CommentDTO commentDTO);
+    Comment save(Long idNews, CommentDTO commentDTO, String token);
 
     /**
      * Used to update the entity (Comment) in the database. The entity ID is used to find the entity to update.
      *
      * @param commentDTO entity to save.
+     * @param token      this is a unique string that is used to authenticate and authorize the user when making
+     *                   requests to protected API resources
      * @return the updated entity (News).
      */
-    Comment update(Long id, CommentDTO commentDTO);
+    Comment update(Long id, CommentDTO commentDTO, String token);
 
     /**
      * This method allows you to delete an entity (Comment) in the database.
      *
-     * @param id this is the parameter by which the entity is searched for further removal from the database.
+     * @param id    this is the parameter by which the entity is searched for further removal from the database.
+     * @param token this is a unique string that is used to authenticate and authorize the user when making
+     *              requests to protected API resources
      */
-    void delete(Long id);
+    void delete(Long id, String token);
 
     /**
      * Returns all comments by specifying news id.
@@ -63,6 +71,5 @@ public interface CommentService {
      * @return A JSON representation of the comments of the given news
      */
     List<Comment> findAllByNewsId(Long newsId, Integer pageNo, Integer pageSize, String sortBy);
+
 }
-
-

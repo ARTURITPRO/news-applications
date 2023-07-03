@@ -20,7 +20,7 @@ import java.util.Objects;
 /**
  * <d>This class provides guidelines for handling exceptions thrown by application controllers and contains unique responses to errors.</d>
  *
- * @Author Artur Malashko
+ * @Author Artur Malashkov
  * @since 17
  */
 @Slf4j

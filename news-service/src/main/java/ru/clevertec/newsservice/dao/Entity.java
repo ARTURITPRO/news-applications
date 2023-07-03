@@ -8,4 +8,5 @@ package ru.clevertec.newsservice.dao;
  */
 public interface Entity {
     Long getId();
+
 }

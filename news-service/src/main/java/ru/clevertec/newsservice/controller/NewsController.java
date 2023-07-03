@@ -1,11 +1,5 @@
 package ru.clevertec.newsservice.controller;
 
-import ru.clevertec.newsservice.dao.Comment;
-import ru.clevertec.newsservice.dao.News;
-import ru.clevertec.newsservice.dto.CommentDTO;
-import ru.clevertec.newsservice.dto.NewsDTO;
-import ru.clevertec.newsservice.mapper.NewsMapper;
-import ru.clevertec.newsservice.service.impl.NewsServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,10 +8,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.clevertec.newsservice.dao.News;
+import ru.clevertec.newsservice.dto.NewsDTO;
+import ru.clevertec.newsservice.mapper.NewsMapper;
+import ru.clevertec.newsservice.service.impl.NewsServiceImpl;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,16 +25,17 @@ import static ru.clevertec.newsservice.controller.constants.Constants.*;
 
 /**
  * <d> This class is a controller that was created using the REST technology. It works with the news service, which,
- *  in turn, implements operations for working with entities (News).</d>
+ * in turn, implements operations for working with entities (News).</d>
  *
- *  @author Artur Malashkov
- *  @since 17
+ * @author Artur Malashkov
+ * @since 17
  */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(NEWS_URL)
 public class NewsController {
+
     private final NewsMapper newsMapper;
     private final NewsServiceImpl newsService;
 
@@ -49,10 +49,10 @@ public class NewsController {
      *
      * @param keyword  this parameter takes a regular expression and the method looks for matches using it.
      *                 It's not a required parameter.
-     * @param pageNo   this parameter is specified to set the page we want to view
-     * @param pageSize this parameter is specified to set the number of entities (news) that will be placed on one page
+     * @param pageNo   this parameter is specified to set the page we want to view.
+     * @param pageSize this parameter is specified to set the number of entities (news) that will be placed on one page.
      * @param sortBy   this parameter indicates the type of sorting of found entities (news) on the page.
-     * @return a list of all news that could be found by the specified search parameters from the database
+     * @return a list of all news that could be found by the specified search parameters from the database.
      */
     @Operation(
             summary = "GET all News ",
@@ -83,7 +83,7 @@ public class NewsController {
      * Example: http://localhost:8080/news_applications/v1/news/5
      *
      * @param id parameter for the id of a find news.
-     * @return news that was found in the database by ID
+     * @return news that was found in the database by ID.
      */
     @Operation(
             summary = "GET News by Id",
@@ -105,8 +105,10 @@ public class NewsController {
     /**
      * This controller method is used to save the entity (News) in the Database.
      *
-     * @param newsDto DTO object to save in the Database
-     * @return NewsDTO stored in the database
+     * @param newsDto DTO object to save in the Database.
+     * @param token   this is a unique string that is used to authenticate and authorize the user when making
+     *                requests to protected API resources.
+     * @return NewsDTO stored in the database.
      */
     @Operation(
             summary = "POST new News",
@@ -118,8 +120,10 @@ public class NewsController {
     @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<NewsDTO> create(@RequestBody @Valid NewsDTO newsDto) {
-        return new ResponseEntity<>(newsMapper.newsToNewsDTO(newsService.save(newsDto)), HttpStatus.CREATED);
+    public ResponseEntity<NewsDTO> create(
+            @RequestBody @Valid NewsDTO newsDto,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return new ResponseEntity<>(newsMapper.newsToNewsDTO(newsService.save(newsDto, token)), HttpStatus.CREATED);
     }
 
     /**
@@ -127,6 +131,8 @@ public class NewsController {
      *
      * @param newsDto DTO object to update in the Database.
      * @param id      this is the id of the news we want to update.
+     * @param token   this is a unique string that is used to authenticate and authorize the user when making
+     *                requests to protected API resources.
      * @return entity (News) that has been updated in the database with new fields.
      */
     @Operation(
@@ -144,25 +150,34 @@ public class NewsController {
             value = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<NewsDTO> update(@PathVariable Long id,  @RequestBody @Valid NewsDTO newsDto) {
-        return new ResponseEntity<>(newsMapper.newsToNewsDTO(newsService.update(id, newsDto)), HttpStatus.OK);
+    public ResponseEntity<NewsDTO> update(
+            @PathVariable Long id,
+            @RequestBody @Valid NewsDTO newsDto,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return new ResponseEntity<>(newsMapper.newsToNewsDTO(newsService.update(id, newsDto, token)), HttpStatus.OK);
     }
 
     /**
      * This controller method is used to delete the entity (News) in the Database.
-     * @param id this is a unique parameter by which the entity will be searched in the database
-     * @return response about the successful deletion of the news
+     *
+     * @param id    this is a unique parameter by which the entity will be searched in the database.
+     * @param token this is a unique string that is used to authenticate and authorize the user when making
+     *              requests to protected API resources.
+     * @return response about the successful deletion of the news.
      */
     @Operation(summary = "DELETE news", description = "DELETE news by id")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    content = { @Content(mediaType = MediaType.APPLICATION_JSON_VALUE) })})
+                    content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE)})})
     @DeleteMapping(
             value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        newsService.delete(id);
+    public ResponseEntity<?> delete(
+            @PathVariable Long id,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        newsService.delete(id, token);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
 }

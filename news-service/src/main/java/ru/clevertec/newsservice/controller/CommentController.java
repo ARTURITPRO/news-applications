@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,18 +25,19 @@ import static ru.clevertec.newsservice.controller.constants.Constants.*;
 
 /**
  * <d>This class is a controller that was created using the REST technology. It works with the news service, which,
- *  * in turn, implements operations for working with entities (comment).</d>
+ * * in turn, implements operations for working with entities (comment).</d>
  *
- *  @author Artur Malashkov
- *  @since 17
+ * @author Artur Malashkov
+ * @since 17
  */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(COMMENTS_URL)
 public class CommentController {
-    private final CommentServiceImpl commentService;
+
     private final CommentMapper commentMapper;
+    private final CommentServiceImpl commentService;
 
     /**
      * This controller method searches and returns all found entities (comment) from the database. Also, its functionality
@@ -48,9 +50,9 @@ public class CommentController {
      * @param keyword  this parameter takes a regular expression and the method looks for matches using it.
      *                 It's not a required parameter.
      * @param pageNo   this parameter is specified to set the page we want to view
-     * @param pageSize this parameter is specified to set the number of entities (comment) that will be placed on one page
+     * @param pageSize this parameter is specified to set the number of entities (comment) that will be placed on one page.
      * @param sortBy   this parameter indicates the type of sorting of found entities (comment) on the page.
-     * @return a list of all news that could be found by the specified search parameters from the database
+     * @return a list of all news that could be found by the specified search parameters from the database.
      */
     @Operation(
             summary = "search all comment ",
@@ -81,7 +83,7 @@ public class CommentController {
      * Example: http://localhost:8080/news_applications/v1/comment/5
      *
      * @param id parameter for the id of a find comment.
-     * @return comment that was found in the database by ID
+     * @return comment that was found in the database by ID.
      */
     @Operation(summary = "search comment by Id", description = "Search for comment by ID in the database")
     @ApiResponses({
@@ -101,8 +103,10 @@ public class CommentController {
     /**
      * This controller method is used to save the entity (Comment) in the Database.
      *
-     * @param commentDto DTO object to save in the Database
-     * @return commentDTO stored in the database
+     * @param commentDto DTO object to save in the Database.
+     * @param token      this is a unique string that is used to authenticate and authorize the user when making
+     *                   requests to protected API resources.
+     * @return commentDTO stored in the database.
      */
     @Operation(
             summary = "POST new Comment",
@@ -115,19 +119,23 @@ public class CommentController {
             value = "/{newsId}/comments",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CommentDTO> create(@PathVariable Long newsId,
-                                             @RequestBody @Valid CommentDTO commentDto) {
+    public ResponseEntity<CommentDTO> create(
+            @PathVariable Long newsId,
+            @RequestBody @Valid CommentDTO commentDto,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
         log.info("newsId = :{}", newsId);
         log.info("commentDto = :{}", commentDto);
-        return new ResponseEntity<>(commentMapper.commentToCommentDTO(commentService.save(newsId, commentDto)),
+        return new ResponseEntity<>(commentMapper.commentToCommentDTO(commentService.save(newsId, commentDto, token)),
                 HttpStatus.CREATED);
     }
 
     /**
      * This controller method is used to update the entity (Comment) in the Database.
      *
-     * @param commentDto DTO object to update in the Database.
      * @param id         this is the id of the comment we want to update.
+     * @param commentDto DTO object to update in the Database.
+     * @param token      this is a unique string that is used to authenticate and authorize the user when making
+     *                   requests to protected API resources.
      * @return entity (Comment) that has been updated in the database with new fields.
      */
     @Operation(
@@ -145,16 +153,21 @@ public class CommentController {
             value = "/{id}",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<CommentDTO> update(@PathVariable Long id, @RequestBody @Valid CommentDTO commentDto) {
-        return new ResponseEntity<>(commentMapper.commentToCommentDTO(commentService.update(id, commentDto)),
+    public ResponseEntity<CommentDTO> update(
+            @PathVariable Long id,
+            @RequestBody @Valid CommentDTO commentDto,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        return new ResponseEntity<>(commentMapper.commentToCommentDTO(commentService.update(id, commentDto, token)),
                 HttpStatus.OK);
     }
 
     /**
      * This controller method is used to delete the entity (Comment) in the Database.
      *
-     * @param id this is a unique parameter by which the entity will be searched in the database
-     * @return response about the successful deletion of the Comment
+     * @param id    this is a unique parameter by which the entity will be searched in the database.
+     * @param token this is a unique string that is used to authenticate and authorize the user when making
+     *              requests to protected API resources.
+     * @return response about the successful deletion of the Comment.
      */
     @Operation(summary = "DELETE Comment", description = "DELETE Comment by id")
     @ApiResponses({
@@ -164,33 +177,37 @@ public class CommentController {
     @DeleteMapping(
             value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> delete(@PathVariable Long id) {
-        commentService.delete(id);
+    public ResponseEntity<?> delete(
+            @PathVariable Long id,
+            @RequestHeader(HttpHeaders.AUTHORIZATION) String token) {
+        commentService.delete(id, token);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
      * API Point for returning all comments by specifying news id.
-     * @param keyword parameter for the id of a certain news
-     * @param pageNo parameter for a specific page
-     * @param pageSize parameter for page size
-     * @param sortBy parameter for sorting the result
-     * @return comment that was found in the database by NewsID
+     *
+     * @param keyword  parameter for the id of a certain news.
+     * @param pageNo   parameter for a specific page.
+     * @param pageSize parameter for page size.
+     * @param sortBy   parameter for sorting the result.
+     * @return comment that was found in the database by NewsID.
      */
     @Operation(summary = "Retrieve all Comments by news ID", description = "Get list of all comments by news id")
-    @ApiResponses({@ApiResponse(responseCode = "200", content = { @Content(schema = @Schema(implementation = CommentDTO.class),
-            mediaType = "application/json") }),
-            @ApiResponse(description = "Such news not found", responseCode = "404", content = { @Content(schema = @Schema()) })})
-    @GetMapping(value =  "/{newsId}/comment", produces = MediaType.APPLICATION_JSON_VALUE)
-    public  ResponseEntity<List<CommentDTO>>  findAllCommentsByNewsId(
+    @ApiResponses({@ApiResponse(responseCode = "200", content = {@Content(schema = @Schema(implementation = CommentDTO.class),
+            mediaType = "application/json")}),
+            @ApiResponse(description = "Such news not found", responseCode = "404", content = {@Content(schema = @Schema())})})
+    @GetMapping(value = "/{newsId}/comment", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<CommentDTO>> findAllCommentsByNewsId(
             @PathVariable(value = "newsId") Long keyword,
             @RequestParam(defaultValue = PAGE_NO) Integer pageNo,
             @RequestParam(defaultValue = PAGE_SIZE) Integer pageSize,
             @RequestParam(defaultValue = SORT_BY) String sortBy) {
         List<Comment> comments = commentService.findAllByNewsId(keyword, pageNo, pageSize, sortBy);
         List<CommentDTO> responseList = comments.stream()
-                .map( commentMapper::commentToCommentDTO)
+                .map(commentMapper::commentToCommentDTO)
                 .collect(Collectors.toList());
         return new ResponseEntity<>(responseList, HttpStatus.OK);
     }
+
 }

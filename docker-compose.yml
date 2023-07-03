@@ -1,0 +1,58 @@
+version: '3.3'
+
+services:
+  news-service:
+    build: ./news-service/.
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILE: redis
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: clevertec
+      SPRING_REDIS_HOST: cache
+      SPRING_REDIS_PORT: 6379
+      FEIGN_USER_CLIENT_URI: http://user-service:8081
+    networks:
+      - postgres-network
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - cache
+
+  user-service:
+    build: ./user-service/.
+    ports:
+      - "8081:8081"
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      POSTGRES_DB: clevertec
+      CLOUD_CONFIG_URI: http://config-server:8888
+    networks:
+      - postgres-network
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: clevertec
+    networks:
+      - postgres-network
+    restart: unless-stopped
+
+  cache:
+    image: "redis"
+    ports:
+      - "6379:6379"
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_DISABLE_COMMANDS=FLUSHDB,FLUSHALL
+    networks:
+      - postgres-network

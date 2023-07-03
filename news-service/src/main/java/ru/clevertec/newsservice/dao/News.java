@@ -14,27 +14,26 @@ import java.util.List;
 /**
  * <d>An entity that is mapped to with a news table in the database.</d>
  *
- *  @author Artur Malashkov
- *  @since 17
+ * @author Artur Malashkov
+ * @since 17
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@jakarta.persistence.Entity
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "news")
+@jakarta.persistence.Entity
 public class News implements Entity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private  Long id;
+    private Long id;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     private LocalDateTime time;
 
     private String title;
-
     private String text;
 
     @Column(name = "username")
@@ -44,4 +43,5 @@ public class News implements Entity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "news")
     @JsonIgnore
     private List<Comment> comments;
+
 }

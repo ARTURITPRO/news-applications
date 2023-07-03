@@ -1,11 +1,6 @@
 package ru.clevertec.newsservice.service.impl;
 
-import ru.clevertec.newsservice.annotation.Caches;
-import ru.clevertec.newsservice.dao.News;
-import ru.clevertec.newsservice.dto.NewsDTO;
-import ru.clevertec.newsservice.mapper.NewsMapper;
-import ru.clevertec.newsservice.repository.NewsRepository;
-import ru.clevertec.newsservice.service.NewsService;
+import com.example.exception.exceptions.PermissionException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -13,6 +8,9 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +18,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.clevertec.newsservice.annotation.Caches;
+import ru.clevertec.newsservice.client.dto.User;
+import ru.clevertec.newsservice.dao.News;
+import ru.clevertec.newsservice.dto.NewsDTO;
+import ru.clevertec.newsservice.mapper.NewsMapper;
+import ru.clevertec.newsservice.repository.NewsRepository;
+import ru.clevertec.newsservice.service.NewsService;
+import ru.clevertec.newsservice.util.UserUtility;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,19 +33,24 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static ru.clevertec.newsservice.constants.Constants.EXCEPTION_MESSAGE_ENTITY_NOT_FOUND_FORMAT;
+import static ru.clevertec.newsservice.util.UserUtility.isUserAdmin;
+import static ru.clevertec.newsservice.util.UserUtility.isUserJournalist;
 
 /**
- * This service was created to work with the news database.
+ * <p> This service was created to work with the news database </p>
  *
  * @author Artur Malashkov
+ * @since 17
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class NewsServiceImpl implements NewsService {
+
     private final NewsRepository newsRepository;
     private final NewsMapper newsMapper;
+    private final UserUtility userUtility;
 
     /**
      * {@inheritDoc}
@@ -69,9 +80,10 @@ public class NewsServiceImpl implements NewsService {
      */
     @Caches
     @Override
+    @Cacheable(value = "news", key = "#id")
     public News findById(Long id) {
         final News news = newsRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format(EXCEPTION_MESSAGE_ENTITY_NOT_FOUND_FORMAT,  id)));
+                .orElseThrow(() -> new EntityNotFoundException(String.format(EXCEPTION_MESSAGE_ENTITY_NOT_FOUND_FORMAT, id)));
         log.info("found giftCertificate - {}", news);
         return news;
     }
@@ -80,9 +92,14 @@ public class NewsServiceImpl implements NewsService {
      * {@inheritDoc}
      */
     @Caches
-    @Transactional
     @Override
-    public News save(NewsDTO newsDto) {
+    @Transactional
+    @CachePut(value = "news", key = "#result.id")
+    public News save(NewsDTO newsDto, String token) {
+        User user = userUtility.getUserByToken(token);
+        if (!(isUserAdmin(user) || isUserJournalist(user))) {
+            throw new PermissionException("No permission to perform operation");
+        }
         News news = newsMapper.newsDTOtoNews(newsDto);
         news.setTime(LocalDateTime.now());
         return newsRepository.save(news);
@@ -92,9 +109,15 @@ public class NewsServiceImpl implements NewsService {
      * {@inheritDoc}
      */
     @Caches
-    @Transactional
     @Override
-    public News update(Long id, NewsDTO newsDTO) {
+    @Transactional
+    @CachePut(value = "news", key = "#id")
+    public News update(Long id, NewsDTO newsDTO, String token) {
+        User user = userUtility.getUserByToken(token);
+        if (!(isUserAdmin(user) || isUserJournalist(user))) {
+            throw new PermissionException("No permission to perform operation");
+        }
+
         News newNews = newsRepository.findById(id)
                 .map(news -> updateNewsFromNewsDTO(news, newsDTO))
                 .map(newsRepository::saveAndFlush)
@@ -108,11 +131,16 @@ public class NewsServiceImpl implements NewsService {
      * {@inheritDoc}
      */
     @Caches
-    @Transactional
     @Override
-    public void delete(Long id) {
-       newsRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String
-                        .format(EXCEPTION_MESSAGE_ENTITY_NOT_FOUND_FORMAT, id)));
+    @Transactional
+    @CacheEvict(value = "news", key = "#id")
+    public void delete(Long id, String token) {
+        User user = userUtility.getUserByToken(token);
+        if (!(isUserAdmin(user) || isUserJournalist(user))) {
+            throw new PermissionException("No permission to perform operation");
+        }
+        newsRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String
+                .format(EXCEPTION_MESSAGE_ENTITY_NOT_FOUND_FORMAT, id)));
 
         newsRepository.deleteById(id);
     }
@@ -130,4 +158,5 @@ public class NewsServiceImpl implements NewsService {
         news.setTime(LocalDateTime.now());
         return news;
     }
+
 }

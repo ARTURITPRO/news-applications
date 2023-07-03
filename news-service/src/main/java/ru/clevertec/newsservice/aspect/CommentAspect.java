@@ -24,7 +24,6 @@ import java.util.Optional;
  * @see Cache
  * @since 17
  */
-
 @Slf4j
 @Aspect
 @Component
@@ -114,4 +113,5 @@ public class CommentAspect {
         cache.delete((Long) arguments[0], clazz);
 
     }
+
 }

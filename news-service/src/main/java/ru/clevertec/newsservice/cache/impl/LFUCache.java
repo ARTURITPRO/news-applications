@@ -223,4 +223,5 @@ public class LFUCache implements Cache {
         Entity entity;
         Integer countCalls;
     }
+
 }

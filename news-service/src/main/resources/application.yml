@@ -6,25 +6,43 @@ spring:
     properties:
       hibernate:
         format_sql: true
-#    hibernate:
-#      ddl-auto: create
-
-#To connect to the database
+  #Cloud
+  cloud:
+    config:
+      enabled: false
+      uri: ${CLOUD_CONFIG_URI:http://localhost:8888}
+  #To connect to the database
   datasource:
     url: jdbc:postgresql://localhost:5432/postgres
     username: postgres
     password: 0147896325aA
     driver-class-name: org.postgresql.Driver
-
+  # Liquibase
   liquibase:
     change-log: classpath:db.changelog/main-include.yaml
     clear-checksums: false
+
+#Eureka
+#eureka:
+#  client:
+#    service-url:
+#      defaultZone: ${EUREKA_URI:http://localhost:8761}
+
+#Port
+server:
+  port: 8080
+
+
 
 #To enable logging starter
 app.common.logging:
   enabled:true
 
-
 #To implement the LFU cache
 cache.size: 10
 cache.algorithm: LFU
+
+# User Feign Client
+feign:
+  user-client:
+    uri: ${FEIGN_USER_CLIENT_URI:http://localhost:8081}

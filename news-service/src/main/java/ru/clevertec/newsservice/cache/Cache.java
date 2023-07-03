@@ -1,7 +1,7 @@
 package ru.clevertec.newsservice.cache;
 
 import ru.clevertec.newsservice.aspect.CommentAspect;
-import ru.clevertec.newsservice.aspect.NewsAspect ;
+import ru.clevertec.newsservice.aspect.NewsAspect;
 import ru.clevertec.newsservice.cache.impl.LFUCache;
 import ru.clevertec.newsservice.cache.impl.LRUCache;
 import ru.clevertec.newsservice.dao.Entity;
@@ -71,4 +71,5 @@ public interface Cache {
     void clear();
 
     boolean isEmpty();
+
 }

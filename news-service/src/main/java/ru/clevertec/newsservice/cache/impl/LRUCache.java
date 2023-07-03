@@ -1,15 +1,15 @@
 package ru.clevertec.newsservice.cache.impl;
 
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Component;
-import ru.clevertec.newsservice.annotation.Caches;
-import ru.clevertec.newsservice.cache.Cache;
-import ru.clevertec.newsservice.dao.Entity ;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+import ru.clevertec.newsservice.annotation.Caches;
+import ru.clevertec.newsservice.cache.Cache;
+import ru.clevertec.newsservice.dao.Entity;
 
 import java.time.Instant;
 import java.util.Comparator;
@@ -224,4 +224,5 @@ public class LRUCache implements Cache {
         Entity entity;
         Instant updatedAt;
     }
+
 }

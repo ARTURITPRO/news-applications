@@ -13,12 +13,11 @@ import lombok.NoArgsConstructor;
  *  @author Artur Malashkov
  *  @since 17
  */
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommentDTO {
-
 
     private Long id;
 

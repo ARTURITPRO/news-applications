@@ -1,13 +1,6 @@
 package ru.clevertec.newsservice.service.impl;
 
-import ru.clevertec.newsservice.annotation.Caches;
-import ru.clevertec.newsservice.dao.Comment;
-import ru.clevertec.newsservice.dao.News;
-import ru.clevertec.newsservice.dto.CommentDTO;
-import ru.clevertec.newsservice.mapper.CommentMapper;
-import ru.clevertec.newsservice.repository.CommentRepository;
-import ru.clevertec.newsservice.repository.NewsRepository;
-import ru.clevertec.newsservice.service.CommentService;
+import com.example.exception.exceptions.PermissionException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -15,6 +8,10 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +19,16 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.clevertec.newsservice.annotation.Caches;
+import ru.clevertec.newsservice.client.dto.User;
+import ru.clevertec.newsservice.dao.Comment;
+import ru.clevertec.newsservice.dao.News;
+import ru.clevertec.newsservice.dto.CommentDTO;
+import ru.clevertec.newsservice.mapper.CommentMapper;
+import ru.clevertec.newsservice.repository.CommentRepository;
+import ru.clevertec.newsservice.repository.NewsRepository;
+import ru.clevertec.newsservice.service.CommentService;
+import ru.clevertec.newsservice.util.UserUtility;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,24 +36,30 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static ru.clevertec.newsservice.constants.Constants.EXCEPTION_MESSAGE_ENTITY_NOT_FOUND_FORMAT;
+import static ru.clevertec.newsservice.util.UserUtility.*;
 
 /**
- * This service was created to work with the news database.
+ * <p> This service was created to work with the comment database </p>
+ *
  * @author Artur Malashkov
+ * @since 17
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@CacheConfig(cacheNames = "commentCache")
 public class CommentServiceImpl implements CommentService {
-    private final CommentRepository commentRepository;
+
+    private final UserUtility userUtility;
+    private final CommentMapper commentMapper;
     private final NewsRepository newsRepository;
-    private  final CommentMapper commentMapper;
+    private final CommentRepository commentRepository;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<Comment> findAll(String keyword, Integer pageNo, Integer pageSize, String sortBy ) {
+    public List<Comment> findAll(String keyword, Integer pageNo, Integer pageSize, String sortBy) {
         Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
         log.info("keyword : {}", keyword);
 
@@ -60,8 +73,7 @@ public class CommentServiceImpl implements CommentService {
                     );
                 }
             }, paging);
-        }
-        else{
+        } else {
             pagedResult = commentRepository.findAll(paging);
         }
         return pagedResult.getContent().stream().collect(Collectors.toList());
@@ -72,31 +84,34 @@ public class CommentServiceImpl implements CommentService {
      */
     @Caches
     @Override
+    @Cacheable(value = "comment", key = "#id")
     public Comment findById(Long id) {
         final Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(String.format(EXCEPTION_MESSAGE_ENTITY_NOT_FOUND_FORMAT, "comment", id)));
-        log.info("found giftCertificate - {}", comment);
+                .orElseThrow(() -> new EntityNotFoundException(
+                        String.format(EXCEPTION_MESSAGE_ENTITY_NOT_FOUND_FORMAT, "comment", id)));
         return comment;
     }
-
 
     /**
      * {@inheritDoc}
      */
     @Caches
-    @Transactional
     @Override
-    public Comment save(Long idNews, CommentDTO commentDTO) {
-        log.info("newsId = :{}", idNews);
-        log.info("commentDto = :{}", commentDTO);
+    @Transactional
+    @CachePut(value = "comment", key = "#result.id")
+    public Comment save(Long idNews, CommentDTO commentDTO, String token) {
+        User user = userUtility.getUserByToken(token);
+        if (!(isUserAdmin(user) || isUserSubscriber(user) || isUserJournalist(user))) {
+            throw new PermissionException("No permission to perform operation");
+        }
         News news = newsRepository.findById(idNews)
                 .orElseThrow(() -> new EntityNotFoundException(String
                         .format(EXCEPTION_MESSAGE_ENTITY_NOT_FOUND_FORMAT, idNews)));
-
         Comment comment = commentMapper.commentDTOToComment(commentDTO);
         comment.setNews(news);
         comment.setTime(LocalDateTime.now());
         log.info("save comment = :{}", comment);
+
         return commentRepository.save(comment);
     }
 
@@ -104,10 +119,16 @@ public class CommentServiceImpl implements CommentService {
      * {@inheritDoc}
      */
     @Caches
-    @Transactional
     @Override
-    public Comment update(Long id, CommentDTO commentDTO) {
-         return commentRepository.findById(id)
+    @Transactional
+    @CachePut(value = "comment", key = "#id")
+    public Comment update(Long id, CommentDTO commentDTO, String token) {
+        User user = userUtility.getUserByToken(token);
+        if (!(isUserAdmin(user) || isUserSubscriber(user) || isUserJournalist(user))) {
+            throw new PermissionException("No permission to perform operation");
+        }
+
+        return commentRepository.findById(id)
                 .map(comment -> updateCommentFromCommentDTO(comment, commentDTO))
                 .map(commentRepository::saveAndFlush)
                 .orElseThrow(() -> new EntityNotFoundException(String
@@ -118,9 +139,14 @@ public class CommentServiceImpl implements CommentService {
      * {@inheritDoc}
      */
     @Caches
-    @Transactional
     @Override
-    public void delete(Long id) {
+    @Transactional
+    @CacheEvict(key = "#id")
+    public void delete(Long id, String token) {
+        User user = userUtility.getUserByToken(token);
+        if (!(isUserAdmin(user) || isUserSubscriber(user) || isUserJournalist(user))) {
+            throw new PermissionException("No permission to perform operation");
+        }
         commentRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(String
                 .format(EXCEPTION_MESSAGE_ENTITY_NOT_FOUND_FORMAT, id)));
 
@@ -151,4 +177,5 @@ public class CommentServiceImpl implements CommentService {
 
         return pagedResult.getContent().stream().collect(Collectors.toList());
     }
+
 }

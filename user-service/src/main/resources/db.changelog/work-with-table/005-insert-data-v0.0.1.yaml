@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005v0.0.1
+      author: Artur Malashkov
+      changes:
+        - sql:
+            INSERT INTO public.users(id, username, password, first_name, last_name)    VALUES (1, 'Artur', '1234', 'Artur', 'Malashkov');
+            INSERT INTO public.users(id, username, password, first_name, last_name)    VALUES (2, 'Irina', '1234', 'Irina', 'Malashkova');
+            INSERT INTO public.users(id, username, password, first_name, last_name)    VALUES (3, 'Max', '1234', 'Max', 'Malashkov');
+            INSERT INTO public.users(id, username, password, first_name, last_name)    VALUES (4, 'Sergei', '1234', 'Sergei', 'Soldatkin');
+            INSERT INTO public.users(id, username, password, first_name, last_name)    VALUES (5, 'Anonimus', '1234', 'Anonimus', 'Anonim');
+            INSERT INTO public.users(id, username, password, first_name, last_name)    VALUES (6, 'Sauron', '1234', 'Sauron', 'Master');
+
+            SELECT SETVAL('users_id_seq', (SELECT MAX(id) FROM users));
+
+            INSERT INTO roles(id, role) VALUES (1, 'ADMIN');
+            INSERT INTO roles(id, role) VALUES (2, 'JOURNALIST');
+            INSERT INTO roles(id, role) VALUES (3, 'SUBSCRIBER');
+
+            SELECT SETVAL('roles_id_seq', (SELECT MAX(id) FROM roles));
+
+            INSERT INTO users_roles(user_id, role_id) VALUES (1, 1);
+            INSERT INTO users_roles(user_id, role_id) VALUES (2, 2);
+            INSERT INTO users_roles(user_id, role_id) VALUES (3, 2);
+            INSERT INTO users_roles(user_id, role_id) VALUES (4, 2);
+            INSERT INTO users_roles(user_id, role_id) VALUES (5, 3);
+            INSERT INTO users_roles(user_id, role_id) VALUES (6, 3);

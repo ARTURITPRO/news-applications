@@ -6,8 +6,10 @@ import ru.clevertec.newsservice.dto.NewsDTO;
 import java.util.List;
 
 /**
- * A service that provides CRUD operations for working with News.
- * @author Artur Malashkov.
+ * <p> A service that provides CRUD operations for working with News. </p>
+ *
+ * @author Artur Malashkov
+ * @since 17
  */
 public interface NewsService {
 
@@ -33,22 +35,30 @@ public interface NewsService {
      * Сreating new news in the database.
      *
      * @param newsDTO this is news that has been submitted for storage in the database.
+     * @param token   this is a unique string that is used to authenticate and authorize the user when making
+     *                requests to protected API resources
      * @return created News.
      */
-    News save(NewsDTO newsDTO);
+    News save(NewsDTO newsDTO, String token);
 
     /**
      * Used to update the entity (News) in the database. The entity ID is used to find the entity to update.
      *
+     * @param id      this is the parameter by which the entity is searched for further removal from the database.
      * @param newsDTO entity to save.
+     * @param token   this is a unique string that is used to authenticate and authorize the user when making
+     *                requests to protected API resources
      * @return the updated entity (News).
      */
-    News update(Long id, NewsDTO newsDTO);
+    News update(Long id, NewsDTO newsDTO, String token);
 
     /**
      * This method allows you to delete an entity (News) in the database.
      *
-     * @param id this is the parameter by which the entity is searched for further removal from the database.
+     * @param id    this is the parameter by which the entity is searched for further removal from the database.
+     * @param token this is a unique string that is used to authenticate and authorize the user when making
+     *              requests to protected API resources
      */
-    void delete(Long id);
+    void delete(Long id, String token);
+
 }

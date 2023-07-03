@@ -1,0 +1,25 @@
+
+server:
+  port: 8081
+
+spring:
+  #To connect to the database
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 0147896325aA
+    driver-class-name: org.postgresql.Driver
+  application:
+    name: user-service
+
+  # Liquibase
+  liquibase:
+    change-log: classpath:db.changelog/main-include.yaml
+    clear-checksums: false
+
+
+jwt:
+  secret:
+    access: qBTmv4oXFFR2GwjexDJ4t6fsIUIUhhXqlktXjXdkcyygs8nPVEwMfo29VDRRepYDVV5IkIxBMzr7OEHXEHd37w==
+    refresh: zL1HB3Pch05Avfynovxrf/kpF9O2m4NCWKJUjEp27s9J2jEG3ifiKCGylaZ8fDeoONSTJP/wAzKawB8F9rOMNg==
+

@@ -13,15 +13,15 @@ import java.time.LocalDateTime;
 /**
  * <d>An entity that is mapped to with a comments table in the database.</d>
  *
- *  @author Artur Malashkov
- *  @since 17
+ * @author Artur Malashkov
+ * @since 17
  */
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Builder
-@jakarta.persistence.Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "comments")
+@jakarta.persistence.Entity
 public class Comment implements Entity {
 
     @Id
@@ -39,7 +39,8 @@ public class Comment implements Entity {
 
     @ToString.Exclude
     @ManyToOne
-    @JoinColumn(name="news_id", nullable=false)
+    @JoinColumn(name = "news_id", nullable = false)
     @JsonIgnore
     private News news;
+
 }

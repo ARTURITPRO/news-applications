@@ -24,7 +24,6 @@ import java.util.Optional;
  * @see Cache
  * @since 17
  */
-
 @Slf4j
 @Aspect
 @Component
@@ -111,4 +110,5 @@ public class NewsAspect {
         joinPoint.proceed(arguments);
         cache.delete((Long) arguments[0], clazz);
     }
+
 }

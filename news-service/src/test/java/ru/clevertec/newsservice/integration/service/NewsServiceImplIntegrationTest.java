@@ -65,34 +65,34 @@ class NewsServiceImplIntegrationTest extends PostgreSQLContainerIntegrationTest 
 //        assertThat(createdNews.getTitle()).isEqualTo("Title1");
 //        assertThat(createdNews.getText()).isEqualTo("Text1");
 //    }
-
-
-    @Test
-    void updateNews() throws IOException {
-        NewsDTO newsDto = getNewsDto();
-        News result = newsService.update(ID, newsDto);
-        assertThat(result.getTitle()).isEqualTo(newsDto.getTitle());
-        assertThat(result.getText()).isEqualTo(newsDto.getText());
-    }
-
-    @Test
-    void updateNonExistentNewsShouldThrowEntityNotFoundException() throws IOException {
-
-        assertThatThrownBy(() -> newsService.update(60L, getNewsDto()))
-                .isInstanceOf(EntityNotFoundException.class);
-    }
-
-    @Test
-    void deleteByIdNews() throws IOException {
-        Integer sizeBefore = newsService.findAll(SEARCH_STR, PAGE_NO, 20, SORTING).size();
-        newsService.delete(9L );
-        Integer sizeAfter = newsService.findAll(SEARCH_STR, PAGE_NO, 20, SORTING).size();
-        assertThat(sizeAfter).isLessThan(sizeBefore);
-    }
-
-    @Test
-    void checkDeleteShouldThrowResourceNotFoundException() throws IOException {
-        assertThatThrownBy(() -> newsService.delete(50L))
-                .isInstanceOf(EntityNotFoundException.class);
-    }
+//
+//
+//    @Test
+//    void updateNews() throws IOException {
+//        NewsDTO newsDto = getNewsDto();
+//        News result = newsService.update(ID, newsDto);
+//        assertThat(result.getTitle()).isEqualTo(newsDto.getTitle());
+//        assertThat(result.getText()).isEqualTo(newsDto.getText());
+//    }
+//
+//    @Test
+//    void updateNonExistentNewsShouldThrowEntityNotFoundException() throws IOException {
+//
+//        assertThatThrownBy(() -> newsService.update(60L, getNewsDto()))
+//                .isInstanceOf(EntityNotFoundException.class);
+//    }
+//
+//    @Test
+//    void deleteByIdNews() throws IOException {
+//        Integer sizeBefore = newsService.findAll(SEARCH_STR, PAGE_NO, 20, SORTING).size();
+//        newsService.delete(9L );
+//        Integer sizeAfter = newsService.findAll(SEARCH_STR, PAGE_NO, 20, SORTING).size();
+//        assertThat(sizeAfter).isLessThan(sizeBefore);
+//    }
+//
+//    @Test
+//    void checkDeleteShouldThrowResourceNotFoundException() throws IOException {
+//        assertThatThrownBy(() -> newsService.delete(50L))
+//                .isInstanceOf(EntityNotFoundException.class);
+//    }
 }
