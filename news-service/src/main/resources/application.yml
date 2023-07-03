@@ -1,0 +1,25 @@
+spring:
+  profiles:
+    active: custom-cache, LRU
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+#    hibernate:
+#      ddl-auto: create
+
+#To connect to the database
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: 0147896325aA
+    driver-class-name: org.postgresql.Driver
+
+  liquibase:
+    change-log: classpath:db.changelog/main-include.yaml
+    clear-checksums: false
+
+#To implement the LFU cache
+cache.size: 10
+cache.algorithm: LFU

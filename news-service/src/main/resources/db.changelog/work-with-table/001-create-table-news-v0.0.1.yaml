@@ -1,0 +1,51 @@
+databaseChangeLog:
+  - preConditions:
+        - runningAs:
+            username: postgres
+  - changeSet:
+      id: 001v0.0.1
+      comment: Create Table News
+      author: Artur Malaskov
+      changes:
+        - createTable:
+            tableName: news
+            columns:
+              - column:
+                  name: id
+                  remarks: ID News
+                  type: bigserial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+
+              - column:
+                  name: time
+                  remarks: Create News Time
+                  type: time
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: title
+                  remarks: Title News
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+              - column:
+                  name: text
+                  remarks: Text News
+                  type: text
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: username
+                  remarks: Text News
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+
+
