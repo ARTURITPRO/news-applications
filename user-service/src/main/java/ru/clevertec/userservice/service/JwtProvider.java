@@ -101,10 +101,12 @@ public class JwtProvider {
     }
 
     private Claims getClaims(@NonNull String token, @NonNull Key secret) {
+        log.info("!!!!!! token : {}", token);
+        String tokenWithoutBarrier = token.substring(7);
         return Jwts.parserBuilder()
                 .setSigningKey(secret)
                 .build()
-                .parseClaimsJws(token)
+                .parseClaimsJws(tokenWithoutBarrier)
                 .getBody();
     }
 

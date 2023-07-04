@@ -5,6 +5,7 @@ import com.example.exception.exceptions.ResourceNotFoundException;
 import io.jsonwebtoken.Claims;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.clevertec.userservice.mapper.UserMapper;
 import ru.clevertec.userservice.dto.JwtRequest;
@@ -13,6 +14,7 @@ import ru.clevertec.userservice.dao.User;
 
 import java.util.HashMap;
 import java.util.Map;
+
 
 /**
  * <p> Authenticated service for checking the password and getting new access and refresh tokens to replace
@@ -25,6 +27,7 @@ import java.util.Map;
  * @see User
  * @since 17
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -43,6 +46,7 @@ public class AuthenticationService {
     }
 
     public JwtResponse login(@NonNull JwtRequest jwtRequest) {
+        log.info("!!!!!!!!!!!!!!!!  UserName : {}", jwtRequest.getUserName());
         User user = userService.findByUsername(jwtRequest.getUserName())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found in database"));
 

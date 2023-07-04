@@ -1,4 +1,4 @@
-
+DROP TABLE IF EXISTS users CASCADE ;
 CREATE TABLE users
 (
     id BIGSERIAL PRIMARY KEY,
@@ -10,7 +10,7 @@ CREATE TABLE users
 
 
 
-
+DROP TABLE IF EXISTS roles CASCADE ;
 CREATE TABLE roles
 (
     id BIGSERIAL PRIMARY KEY,
@@ -18,7 +18,7 @@ CREATE TABLE roles
 );
 
 
-
+DROP TABLE IF EXISTS users_roles CASCADE ;
 CREATE TABLE users_roles
 (
     user_id BIGINT NOT NULL,

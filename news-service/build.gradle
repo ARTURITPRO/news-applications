@@ -45,9 +45,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.0.6'
     implementation 'redis.clients:jedis:4.4.0-rc1'
 
-    //Eureka
-    //implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-
     //Lombook
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -76,15 +73,6 @@ dependencies {
     //wiremock
     testImplementation 'com.github.tomakehurst:wiremock-jre8-standalone:2.35.0'
 
-    //Библиотека guava
-   // implementation 'com.google.guava:guava:31.1-jre'
-
-}
-
-dependencyManagement {
-    imports {
-        mavenBom 'org.springframework.cloud:spring-cloud-dependencies:2022.0.2'
-    }
 }
 
 tasks.named('test') {
