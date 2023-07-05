@@ -1,7 +1,7 @@
 package ru.clevertec.userservice.service;
 
-import com.example.exception.exceptions.AuthException;
-import com.example.exception.exceptions.ResourceNotFoundException;
+import ru.clevertec.exception.exceptions.AuthException;
+import ru.clevertec.exception.exceptions.ResourceNotFoundException;
 import io.jsonwebtoken.Claims;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;

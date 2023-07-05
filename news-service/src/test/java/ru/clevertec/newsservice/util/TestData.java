@@ -1,15 +1,28 @@
 package ru.clevertec.newsservice.util;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import ru.clevertec.newsservice.client.dto.Role;
+import ru.clevertec.newsservice.client.dto.RoleEnum;
+import ru.clevertec.newsservice.client.dto.User;
 import ru.clevertec.newsservice.dao.Comment;
 import ru.clevertec.newsservice.dao.News;
 import ru.clevertec.newsservice.dto.CommentDTO;
 import ru.clevertec.newsservice.dto.NewsDTO;
 
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class TestData {
+
+    private static final ObjectMapper mapper = JsonMapper.builder()
+            .findAndAddModules()
+            .build();
 
    private static LocalDateTime getCurrentTime(){
         LocalDateTime fixedTime = LocalDateTime.of(2023, 6, 29, 15, 10);
@@ -50,6 +63,42 @@ public class TestData {
         comments.add(CommentDTO.builder().text("Text3").userName("User3").build());
         return comments;
     }
+
+
+    public static String buildUserAdminResponse() throws IOException {
+        System.out.println("IN buildUserAdminResponse() !!!!!!!!!!!");
+        String s = mapper.writeValueAsString(mapper.readValue(Paths.get("src/test/resources/json/personWithAnimal.json").toFile(),
+                Comment.class));
+        System.out.println(s + "!!!!!!!!!!!!");
+        return s;
+    }
+
+    public static User getUserAdmin() {
+        Set<Role> roles = new HashSet<>();
+        roles.add(new Role(1L, RoleEnum.ADMIN));
+        return User.builder().id(1L).username("User1").password("1234").firstName("Ivan").lastName("Ivanov")
+                .roles(roles).build();
+    }
+
+    public static User getUserSubscriber() {
+        Set<Role> roles = new HashSet<>();
+        roles.add(new Role(1L, RoleEnum.SUBSCRIBER));
+        return User.builder().id(1L).username("User1").password("1234").firstName("Ivan").lastName("Ivanov")
+                .roles(roles).build();
+    }
+
+    public static User getUserJournalist() {
+        Set<Role> roles = new HashSet<>();
+        roles.add(new Role(1L, RoleEnum.JOURNALIST));
+        return User.builder().id(1L).username("User1").password("1234").firstName("Ivan").lastName("Ivanov")
+                .roles(roles).build();
+    }
+
+    public static User getUserWithoutRole() {
+        return User.builder().id(1L).username("User1").password("1234").firstName("Ivan").lastName("Ivanov")
+                .roles(new HashSet<>()).build();
+    }
+
 
     public static News getNews() {
         return getNewsList().get(0);

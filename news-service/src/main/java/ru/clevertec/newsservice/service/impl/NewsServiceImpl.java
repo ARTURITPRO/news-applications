@@ -1,6 +1,6 @@
 package ru.clevertec.newsservice.service.impl;
 
-import com.example.exception.exceptions.PermissionException;
+import ru.clevertec.exception.exceptions.PermissionException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;

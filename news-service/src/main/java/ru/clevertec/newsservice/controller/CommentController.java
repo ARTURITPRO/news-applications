@@ -187,7 +187,7 @@ public class CommentController {
     /**
      * API Point for returning all comments by specifying news id.
      *
-     * @param keyword  parameter for the id of a certain news.
+     * @param newsId  parameter for the id of a certain news.
      * @param pageNo   parameter for a specific page.
      * @param pageSize parameter for page size.
      * @param sortBy   parameter for sorting the result.
@@ -199,11 +199,11 @@ public class CommentController {
             @ApiResponse(description = "Such news not found", responseCode = "404", content = {@Content(schema = @Schema())})})
     @GetMapping(value = "/{newsId}/comment", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<CommentDTO>> findAllCommentsByNewsId(
-            @PathVariable(value = "newsId") Long keyword,
+            @PathVariable(value = "newsId") Long newsId,
             @RequestParam(defaultValue = PAGE_NO) Integer pageNo,
             @RequestParam(defaultValue = PAGE_SIZE) Integer pageSize,
             @RequestParam(defaultValue = SORT_BY) String sortBy) {
-        List<Comment> comments = commentService.findAllByNewsId(keyword, pageNo, pageSize, sortBy);
+        List<Comment> comments = commentService.findAllByNewsId(newsId, pageNo, pageSize, sortBy);
         List<CommentDTO> responseList = comments.stream()
                 .map(commentMapper::commentToCommentDTO)
                 .collect(Collectors.toList());

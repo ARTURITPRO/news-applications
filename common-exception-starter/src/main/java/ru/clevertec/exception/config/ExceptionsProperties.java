@@ -1,4 +1,4 @@
-package com.example.exception.config;
+package ru.clevertec.exception.config;
 
 
 import jakarta.annotation.PostConstruct;

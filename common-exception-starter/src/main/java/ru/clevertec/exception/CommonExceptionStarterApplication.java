@@ -1,4 +1,4 @@
-package com.example.exception;
+package ru.clevertec.exception;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

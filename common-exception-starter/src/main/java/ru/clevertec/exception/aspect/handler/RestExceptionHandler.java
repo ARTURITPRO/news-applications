@@ -1,6 +1,6 @@
-package com.example.exception.aspect.handler;
+package ru.clevertec.exception.aspect.handler;
 
-import com.example.exception.aspect.ErrorResponse;
+import ru.clevertec.exception.aspect.ErrorResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.example.exception.constants.Constants ;
-import com.example.exception.util.MessageUtil ;
+import ru.clevertec.exception.constants.Constants;
+import ru.clevertec.exception.util.MessageUtil;
 
 import java.util.Date;
 import java.util.Objects;

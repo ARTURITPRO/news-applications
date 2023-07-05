@@ -61,7 +61,7 @@ The service also provides logging by levels in all layers of the application
 ### News Service:
 A service that implements a news management system.  
 **Available endpoints**:  
-*GET /news_applications/v1/news?keyword=%25City%25* - Get All News With Criteria String
+*GET /news_applications/v1/news?keyword=%25City%25* - Get All News With CriteriaString
 *GET /news_applications/v1/news* - Get All News & Default Page Size=10 & Default PageNo=0  
 *POST /news_applications/v1/news* - Create news  
 *PUT /news_applications/v1/news/{id}* - Update news

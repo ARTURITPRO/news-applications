@@ -1,6 +1,6 @@
-package com.example.exception.aspect;
+package ru.clevertec.exception.aspect;
 
-import com.example.exception.aspect.handler.RestExceptionHandler;
+import ru.clevertec.exception.aspect.handler.RestExceptionHandler;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;

@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.example.exception.config.ExceptionsAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=ru.clevertec.exception.config.ExceptionsAutoConfiguration

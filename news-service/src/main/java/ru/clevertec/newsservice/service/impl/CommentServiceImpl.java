@@ -1,6 +1,6 @@
 package ru.clevertec.newsservice.service.impl;
 
-import com.example.exception.exceptions.PermissionException;
+import ru.clevertec.exception.exceptions.PermissionException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -86,9 +86,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     @Cacheable(value = "comment", key = "#id")
     public Comment findById(Long id) {
+        log.info("!!!!! comment : {}", id);
         final Comment comment = commentRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(
                         String.format(EXCEPTION_MESSAGE_ENTITY_NOT_FOUND_FORMAT, "comment", id)));
+        log.info("!!!!! comment : {}", comment);
         return comment;
     }
 

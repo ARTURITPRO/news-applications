@@ -1,4 +1,4 @@
-package com.example.exception.constants;
+package ru.clevertec.exception.constants;
 
 import java.util.Locale;
 

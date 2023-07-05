@@ -44,6 +44,9 @@ INSERT INTO news (id, time, title, text, username) VALUES
 (18, '23:30:20', 'A new cinema has opened in the center of Moscow', 'A new cinema for 10 spectators has opened in the very center of Moscow. Films long awaited by the audience were presented at the opening.', 'Zelc'),
 (19, '01:30:20', 'Increasing the retirement age', 'The State Duma is considering a bill to raise the retirement age to 68. Deputies have already started discussing this issue.', 'Mario'),
 (20, '02:30:20', 'A new startup in the cloud market', 'A new startup in the cloud market offers highly specialized cloud services for a target audience. The company intends to become a leader in this industry.', 'Dekster');
+
+SELECT setval('news_id_seq', (SELECT max(id) FROM news));
+
 INSERT INTO comments (id, time, text, username, news_id) VALUES
                                                              (1,'12:05:10', 'I agree, completely!', 'Elena', 1),
                                                              (2,'13:45:28', 'What a touching story!', 'Andrey', 2),
@@ -246,3 +249,5 @@ INSERT INTO comments (id, time, text, username, news_id) VALUES
                                                           (198,'14:20:00', 'Well done, great idea', 'Gregory', 18),
                                                           (199,'16:00:00', 'Looking forward to the continuation', 'Eugene', 19),
                                                           (200,'16:00:00', 'This world is going to hell', 'Arthur', 20);
+
+SELECT setval('comments_id_seq', (SELECT max(id) FROM comments));

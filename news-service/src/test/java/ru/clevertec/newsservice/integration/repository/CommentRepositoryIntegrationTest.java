@@ -1,14 +1,15 @@
 package ru.clevertec.newsservice.integration.repository;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import ru.clevertec.newsservice.dao.Comment;
 import ru.clevertec.newsservice.integration.PostgreSQLContainerIntegrationTest;
-import ru.clevertec.newsservice.dao.Comment ;
-import ru.clevertec.newsservice.repository.CommentRepository ;
+import ru.clevertec.newsservice.repository.CommentRepository;
 
 import java.util.Optional;
 
@@ -16,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static ru.clevertec.newsservice.util.Constants.*;
 import static ru.clevertec.newsservice.util.TestData.getComment;
 
-
+@Tag("Integration test")
 class CommentRepositoryIntegrationTest extends PostgreSQLContainerIntegrationTest {
 
     @Autowired
@@ -27,7 +28,7 @@ class CommentRepositoryIntegrationTest extends PostgreSQLContainerIntegrationTes
         Pageable paging = PageRequest.of(PAGE_NO, PAGE_SIZE, Sort.by(SORTING));
         Page<Comment> pagedResult = commentRepository.findAll(paging);
         assertThat(pagedResult.getContent().size()).isEqualTo(10);
-        }
+    }
 
     @Test
     void findByIdComment() {
@@ -71,10 +72,10 @@ class CommentRepositoryIntegrationTest extends PostgreSQLContainerIntegrationTes
 
     @Test
     void deleteCommentById() {
-        Integer sizeBefore = commentRepository.findAll(PageRequest.of(PAGE_NO, PAGE_SIZE +190, Sort.by(SORTING)))
+        Integer sizeBefore = commentRepository.findAll(PageRequest.of(PAGE_NO, PAGE_SIZE + 190, Sort.by(SORTING)))
                 .getContent().size();
         commentRepository.deleteById(20L);
-        Integer sizeAfter = commentRepository.findAll(PageRequest.of(PAGE_NO, PAGE_SIZE +190, Sort.by(SORTING)))
+        Integer sizeAfter = commentRepository.findAll(PageRequest.of(PAGE_NO, PAGE_SIZE + 190, Sort.by(SORTING)))
                 .getContent().size();
         assertThat(sizeAfter).isLessThan(sizeBefore);
     }

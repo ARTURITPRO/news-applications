@@ -1,5 +1,6 @@
 package ru.clevertec.newsservice.integration.repository;
 
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static ru.clevertec.newsservice.util.Constants.*;
 import static ru.clevertec.newsservice.util.TestData.getNews;
 
-
+@Tag("Integration test")
 class NewsRepositoryIntegrationTest extends PostgreSQLContainerIntegrationTest {
 
     @Autowired
@@ -63,10 +64,10 @@ class NewsRepositoryIntegrationTest extends PostgreSQLContainerIntegrationTest {
 
     @Test
     void deleteNewsById() {
-        Integer sizeBefore = newsRepository.findAll(PageRequest.of(PAGE_NO, PAGE_SIZE +190, Sort.by(SORTING)))
+        Integer sizeBefore = newsRepository.findAll(PageRequest.of(PAGE_NO, PAGE_SIZE + 190, Sort.by(SORTING)))
                 .getContent().size();
         newsRepository.deleteById(9L);
-        Integer sizeAfter = newsRepository.findAll(PageRequest.of(PAGE_NO, PAGE_SIZE +190, Sort.by(SORTING)))
+        Integer sizeAfter = newsRepository.findAll(PageRequest.of(PAGE_NO, PAGE_SIZE + 190, Sort.by(SORTING)))
                 .getContent().size();
         assertThat(sizeAfter).isLessThan(sizeBefore);
     }

@@ -1,9 +1,9 @@
-package com.example.exception.util;
+package ru.clevertec.exception.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import com.example.exception.constants.Constants ;
+import ru.clevertec.exception.constants.Constants;
 
 /**
  * <d>This class is used for RestExceptionHandler</d>

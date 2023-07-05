@@ -1,4 +1,4 @@
-package com.example.exception.exceptions;
+package ru.clevertec.exception.exceptions;
 
 /**
  * ResourceNotFoundException class extends RuntimeException class.

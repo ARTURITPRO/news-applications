@@ -1,4 +1,4 @@
-package com.example.exception.exceptions;
+package ru.clevertec.exception.exceptions;
 
 /**
  * AuthException class extends RuntimeException class.
