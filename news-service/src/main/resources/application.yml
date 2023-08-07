@@ -17,6 +17,11 @@ spring:
   liquibase:
     change-log: classpath:db.changelog/main-include.yaml
     clear-checksums: false
+  cache.type: redis
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
 
 #Port
 server:

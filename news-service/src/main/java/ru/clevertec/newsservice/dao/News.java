@@ -39,9 +39,9 @@ public class News implements Entity {
     @Column(name = "username")
     private String userName;
 
+    @JsonIgnore
     @ToString.Exclude
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "news")
-    @JsonIgnore
     private List<Comment> comments;
 
 }

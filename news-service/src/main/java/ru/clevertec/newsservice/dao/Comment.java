@@ -37,10 +37,10 @@ public class Comment implements Entity {
     @Column(name = "username")
     private String userName;
 
-    @ToString.Exclude
     @ManyToOne
-    @JoinColumn(name = "news_id", nullable = false)
     @JsonIgnore
+    @ToString.Exclude
+    @JoinColumn(name = "news_id", nullable = false)
     private News news;
 
 }

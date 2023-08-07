@@ -35,8 +35,7 @@ import static ru.clevertec.newsservice.util.TestData.getNewsDto;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ControllerNewsTest extends PostgreSQLContainerIntegrationTest {
 
-    @Autowired
-    NewsController newsController;
+    private  final NewsController  newsController;
 
     @Test
     void findNewsById() {

@@ -68,16 +68,16 @@ public class NewsAspect {
      * @return the result of executing the method to which the advice was applied.
      * The result of the method execution does not change.
      */
-    @Around("joinToCache() && execution(public * ru.clevertec.newsservice.service.impl.NewsServiceImpl.save(..))")
-    public Object putToCacheAndDatabase(ProceedingJoinPoint joinPoint) throws Throwable {
-        log.info("saveInTheCacheAndDatabase");
-        Object[] arguments = joinPoint.getArgs();
-
-        Entity entity = (Entity) joinPoint.proceed(arguments);
-
-        cache.save(entity);
-        return entity;
-    }
+//    @Around("joinToCache() && execution(public * ru.clevertec.newsservice.service.impl.NewsServiceImpl.save(..))")
+//    public Object putToCacheAndDatabase(ProceedingJoinPoint joinPoint) throws Throwable {
+//        log.info("saveInTheCacheAndDatabase");
+//        Object[] arguments = joinPoint.getArgs();
+//
+//        Entity entity = (Entity) joinPoint.proceed(arguments);
+//
+//        cache.save(entity);
+//        return entity;
+//    }
 
     /**
      * Advice at the method level. This advice intercepts control to interact with the cache.

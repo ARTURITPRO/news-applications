@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
@@ -35,13 +37,17 @@ import static ru.clevertec.newsservice.util.TestData.getCommentDTO;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ControllerCommentTest extends PostgreSQLContainerIntegrationTest {
 
-    @Autowired
-    CommentController commentController;
+   private final TestRestTemplate restTemplate;
+    private final CommentController commentController;
+
+    @LocalServerPort
+    private int port;
 
     @Test
     void findPersonByIdComment() {
 
-        ResponseEntity<CommentDTO> response = commentController.findById(ID);
+      //  ResponseEntity<CommentDTO> response = commentController.findById(ID);
+        ResponseEntity<CommentDTO> response = restTemplate.getForEntity("http://localhost:" + port + "/news_applications/v1/comment/1", CommentDTO.class);
         CommentDTO comment = response.getBody();
         assertNotNull(comment);
         assertEquals(ID, comment.getId());
